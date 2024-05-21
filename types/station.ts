@@ -8,7 +8,7 @@ export interface RawStation {
   lsname: string;
   /** ID of the station */
   ls_id: number;
-  
+
   relevance: number; // TODO
 
   site_code: string; // TODO: figure out what this is
@@ -76,5 +76,35 @@ export class Station {
         coordinates: [this.location.coordinates.x, this.location.coordinates.y],
       },
     };
+  }
+
+  public json(): { [key: string]: any } {
+    return {
+      stationName: this.stationName,
+      stationId: this.stationId,
+      settlementName: this.settlementName,
+      settlementId: this.settlementId,
+      siteCode: this.siteCode,
+      type: this.type,
+      networkId: this.networkId,
+      relevance: this.relevance,
+      location: this.location,
+      bay: this.bay,
+    };
+  }
+
+  public static fromJson(json: { [key: string]: any }): Station {
+    return new Station(
+      json.stationName,
+      json.stationId,
+      json.settlementName,
+      json.settlementId,
+      json.siteCode,
+      json.type,
+      json.networkId,
+      json.relevance,
+      json.location,
+      json.bay
+    );
   }
 }

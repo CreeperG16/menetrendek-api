@@ -160,7 +160,7 @@ export class RoutePart {
 
     public readonly fare: number,
 
-    private readonly rawData: RouteNativeData
+    //private readonly rawData: RouteNativeData
   ) {}
 
   public static fromRaw(date: Date, raw: RouteNativeData): RoutePart {
@@ -221,16 +221,54 @@ export class RoutePart {
       raw.Domain_code,
       raw.Fare,
 
-      raw // raw data
+      //raw // raw data
     );
   }
 
-  public getRaw(): RouteNativeData {
-    return this.rawData;
-  }
+  //public getRaw(): RouteNativeData {
+  //  return this.rawData;
+  //}
 
   public async getDescription(): Promise<RoutePartDescription> {
     return await runDescription(this);
+  }
+
+  public json(): { [key: string]: any } {
+    return {
+      partId: this.partId,
+      runId: this.runId,
+      from: this.from.json(),
+      to: this.to.json(),
+      departure: this.departure,
+      arrival: this.arrival,
+      distance: this.distance,
+      vehicle: this.vehicle,
+      name: this.name,
+      domainCode: this.domainCode,
+      fare: this.fare,
+
+      // TEMP
+      //rawData: this.rawData,
+    };
+  }
+
+  public static fromJson(json: { [key: string]: any }): RoutePart {
+    return new RoutePart(
+      json.partId,
+      json.runId,
+      Station.fromJson(json.from),
+      Station.fromJson(json.to),
+      new Date(json.departure),
+      new Date(json.arrival),
+      json.distance,
+      json.vehicle,
+      json.name,
+      json.domainCode,
+      json.fare,
+
+      // TEMP
+      //json.rawData // raw data
+    );
   }
 }
 
@@ -254,7 +292,7 @@ export class Route {
     /** The total distance travelled in this route. */
     public readonly distance: number,
 
-    private readonly rawData: RouteNativeData[]
+    //private readonly rawData: RouteNativeData[]
   ) {}
 
   /** Create a new Route instance from raw data. */
@@ -314,13 +352,13 @@ export class Route {
       arrival,
       raw.reduce((a, b) => a + b.Distance, 0),
 
-      raw // Raw data
+      //raw // Raw data
     );
   }
 
-  public getRawData(): RouteNativeData[] {
-    return this.rawData;
-  }
+  //public getRawData(): RouteNativeData[] {
+  //  return this.rawData;
+  //}
 
   public async getMoreInfo(): Promise<RouteInfo> {
     return await routeDetails(this);
@@ -328,5 +366,35 @@ export class Route {
 
   public getPart(runId: number): RoutePart | undefined {
     return this.routeParts.find(part => part.runId === runId);
+  }
+
+  public json(): { [key: string]: any } {
+    return {
+      routeId: this.routeId,
+      routeParts: this.routeParts.map((part) => part.json()),
+      from: this.from.json(),
+      to: this.to.json(),
+      departure: this.departure,
+      arrival: this.arrival,
+      distance: this.distance,
+
+      // TEMP
+      //rawData: this.rawData,
+    };
+  }
+
+  public static fromJson(json: { [key: string]: any }): Route {
+    return new Route(
+      json.routeId,
+      json.routeParts.map((part: { [key: string]: any }) => RoutePart.fromJson(part)),
+      Station.fromJson(json.from),
+      Station.fromJson(json.to),
+      new Date(json.departure),
+      new Date(json.arrival),
+      json.distance,
+
+      // TEMP
+      //json.rawData
+    );
   }
 }
