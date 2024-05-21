@@ -10,7 +10,7 @@ interface RawParameters {
   start_ls_name: string;
   stop_ls_id: number;
   stop_ls_name: string;
-  nativeData: RouteNativeData[];
+  //nativeData: RouteNativeData[];
 }
 
 export class RouteMoreInfoParameters {
@@ -24,7 +24,7 @@ export class RouteMoreInfoParameters {
       start_ls_name: this.route.from.stationName,
       stop_ls_id: this.route.to.stationId,
       stop_ls_name: this.route.to.stationName,
-      nativeData: this.route.routeParts.map((part) => part.getRaw()),
+      //nativeData: this.route.routeParts.map((part) => part.getRaw()), // TODO: reimplement
     };
   }
 }
