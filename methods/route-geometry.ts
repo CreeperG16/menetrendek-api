@@ -30,11 +30,12 @@ interface Feature<Type extends GeometryType> {
   }
 }
 
+// FIXME: need raw data
 // geodata(data, nativeData) in website code
 export async function routeGeometry(route: Route): Promise<RawRouteGeometry> {
   const result = await postRoute("/", {
     query: "getGeomC", // "jarat_kifejtes2_json" ?
-    nativeData: route.routeParts.map(part => part.getRaw()),
+    //nativeData: route.routeParts.map(part => part.getRaw()), // temp
   });
 
   if (result.status === "error") throw new Error(result.errMsg);

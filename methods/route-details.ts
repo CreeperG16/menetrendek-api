@@ -16,6 +16,7 @@ interface RawParameters {
 export class RouteMoreInfoParameters {
   constructor(public readonly route: Route) {}
 
+  // FIXME: need raw data
   public getRaw(): RawParameters {
     return {
       query: "jarat_kifejtes_text_jsonC", // "jarat_kifejtes_text_json" ?
